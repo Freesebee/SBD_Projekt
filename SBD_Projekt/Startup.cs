@@ -26,6 +26,7 @@ namespace SBD_Projekt
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
             services.AddDbContext<MyDBContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("MyDB"));

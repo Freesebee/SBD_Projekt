@@ -17,5 +17,7 @@
         public int ManufacturerId { get; set; }
         public ICollection<Client> ProductEnjoyers { get; set;}
         public ICollection<OrderedProduct> OrderedProducts { get; set; }
+        public ICollection<Sale> Sales { get; set; }
+
     }
 }

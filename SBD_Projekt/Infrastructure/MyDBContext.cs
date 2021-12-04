@@ -31,6 +31,14 @@ namespace SBDProjekt.Infrastructure
                     x => x.HasOne(x => x.Product).WithMany().HasForeignKey(x => x.ProductId)
                 );
 
+            modelBuilder.Entity<Sale>()
+                .HasMany(x => x.DiscountedProducts)
+                .WithMany(x => x.Sales)
+                .UsingEntity<DiscountedProduct>(
+                    x => x.HasOne(p => p.Product).WithMany().HasForeignKey(x => x.ProductId),
+                    x => x.HasOne(x => x.Sale).WithMany().HasForeignKey(x => x.SaleId)
+                );
+
             modelBuilder.Entity<OrderedProduct>()
                 .HasKey(op => new { op.OrderId, op.ProductId });
 
