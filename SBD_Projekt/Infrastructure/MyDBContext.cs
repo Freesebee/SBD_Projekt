@@ -52,5 +52,9 @@ namespace SBDProjekt.Infrastructure
                 .WithMany(p => p.OrderedProduct)
                 .HasForeignKey(op => op.OrderId);
         }
+
+        public DbSet<SBDProjekt.Models.DiscountedProduct> DiscountedProduct { get; set; }
+
+        public DbSet<SBDProjekt.Models.FavouriteProduct> FavouriteProduct { get; set; }
     }
 }
