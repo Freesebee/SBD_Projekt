@@ -56,5 +56,6 @@ namespace SBDProjekt.Infrastructure
         public DbSet<SBDProjekt.Models.DiscountedProduct> DiscountedProduct { get; set; }
 
         public DbSet<SBDProjekt.Models.FavouriteProduct> FavouriteProduct { get; set; }
+        
     }
 }
