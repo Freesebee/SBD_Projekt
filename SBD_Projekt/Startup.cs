@@ -27,6 +27,10 @@ namespace SBD_Projekt
         {
             services.AddControllersWithViews();
 
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(3600);
+            });
+
             services.AddDbContext<MyDBContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("MyDB"));
@@ -48,6 +52,8 @@ namespace SBD_Projekt
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseRouting();
 
