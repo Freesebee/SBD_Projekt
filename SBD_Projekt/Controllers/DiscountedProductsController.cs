@@ -162,5 +162,12 @@ namespace SBD_Projekt.Controllers
         {
             return _context.DiscountedProduct.Any(e => e.ProductId == id);
         }
+        //TODO: dokonczyc ASAP- mam liste productID, teraz musze wypisac wszystkie produktu o danych productID
+        //public async Task<IActionResult> ProductsOnThisSale(int id)
+        //{
+        //    var q = _context.DiscountedProduct.Where(c => c.SaleId.Equals(id));
+        //    var b = _context.Products.Where(d => d.Id.Equals(q);
+        //    return View(await b.ToListAsync());
+        //}
     }
 }

@@ -54,7 +54,7 @@ namespace SBD_Projekt.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Price,StartDate,EndDate")] Sale sale)
+        public async Task<IActionResult> Create([Bind("Id,Name,StartDate,EndDate")] Sale sale)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace SBD_Projekt.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Price,StartDate,EndDate")] Sale sale)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,EndDate")] Sale sale)
         {
             if (id != sale.Id)
             {
