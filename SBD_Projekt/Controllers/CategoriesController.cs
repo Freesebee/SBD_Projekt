@@ -153,7 +153,6 @@ namespace SBD_Projekt.Controllers
         public async Task<IActionResult> ShowProducts(int id)
         {
             var q = _context.Products.Where(c => c.CategoryId.Equals(id));
-            //return RedirectToAction("Index", "Products", await q.ToListAsync());
             return View(await q.ToListAsync());
         }
     }
