@@ -44,6 +44,7 @@ namespace SBD_Projekt
                 .AddCookie(options =>
                 {
                     options.LoginPath = "/Clients/Login";
+                    options.AccessDeniedPath = "/AccessDenied";
                 });
         }
 
