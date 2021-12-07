@@ -13,6 +13,7 @@ using SBDProjekt.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SBD_Projekt
@@ -45,6 +46,21 @@ namespace SBD_Projekt
                 {
                     options.LoginPath = "/Clients/Login";
                     options.AccessDeniedPath = "/AccessDenied";
+                    options.Events = new CookieAuthenticationEvents()
+                    {
+                        OnSigningIn = async context =>
+                        {
+                            var principal = context.Principal;
+                            if (principal.HasClaim(c => c.Type == ClaimTypes.Email
+                                && principal.Claims.FirstOrDefault(
+                                    c => c.Type == ClaimTypes.Email).Value == "test@test.pl"))
+                            {
+                                var claimsIdentity = principal.Identity as ClaimsIdentity;
+                                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Tester"));
+                            }
+                            await Task.CompletedTask;
+                        }
+                    };
                 });
         }
 
