@@ -2,8 +2,9 @@
 
 @{
     ViewBag.Title = "Login";
-    var returnUrl = ViewData["ReturnUrl"] as string;
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var returnUrl = ViewData["ReturnUrl"] as string;
+    var errorMessage = TempData["Error"] as string;
 }
 <div class="row justify-content-md-center">
     <div class="col-md-4">
@@ -11,6 +12,10 @@
             <div class="card-header">
                 Login
             </div>
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <h4 class="alert-danger" style="padding:20px;">@errorMessage</h4>
+            }
             <div class="card-body">
                 @using (Html.BeginForm(
                      "Login", 

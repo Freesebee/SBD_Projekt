@@ -92,14 +92,15 @@
                     var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
                     await HttpContext.SignInAsync(claimsPrinciple);
 
-                    return Redirect(returnUrl);
+                    return returnUrl != null ? Redirect(returnUrl) : Redirect("Index");
                 }
                 else
                 {
-                    ViewBag.error = "Login failed";
-                    return RedirectToAction("Login");
+                    TempData["Error"] = "User email or password is not valid";
+                    return RedirectToAction("Login", new { ReturnUrl = returnUrl});
                 }
             }
+
             return View();
         }
 
