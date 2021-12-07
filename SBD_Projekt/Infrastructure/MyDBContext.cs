@@ -3,13 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+using SBD_Projekt.Models;
 
 namespace SBDProjekt.Infrastructure
 {
-    public class MyDBContext : DbContext
+    public class MyDBContext : IdentityDbContext<ApplicationUser>
     {
-        public MyDBContext(DbContextOptions options) : base(options)
+        public MyDBContext(DbContextOptions<MyDBContext> options) : base(options)
         {
         }
 
@@ -23,6 +28,14 @@ namespace SBDProjekt.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+            //modelBuilder.Ignore<IdentityUserLogin<string>>();
+            //modelBuilder.Ignore<IdentityUserRole<string>>();
+            //modelBuilder.Ignore<IdentityUserClaim<string>>();
+            //modelBuilder.Ignore<IdentityUserToken<string>>();
+            //modelBuilder.Ignore<IdentityUser<string>>();
+            //modelBuilder.Ignore<ApplicationUser>();
+
             modelBuilder.Entity<Product>()
                 .HasMany(x => x.ProductEnjoyers)
                 .WithMany(x => x.FavouriteProducts)

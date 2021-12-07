@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Login";
+    var returnUrl = ViewData["ReturnUrl"] as string;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="row justify-content-md-center">
@@ -11,7 +12,11 @@
                 Login
             </div>
             <div class="card-body">
-                @using (Html.BeginForm("Login", "Clients", FormMethod.Post))
+                @using (Html.BeginForm(
+                     "Login", 
+                     "Clients",
+                     new { ReturnUrl=returnUrl },
+                     FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
                     <div class="form-group">

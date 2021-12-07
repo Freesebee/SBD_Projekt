@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace SBD_Projekt.Controllers
         }
 
         // GET: FavouriteProducts
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var myDBContext = _context.FavouriteProduct.Include(f => f.Client).Include(f => f.Product);

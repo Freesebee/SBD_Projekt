@@ -1,11 +1,15 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SBD_Projekt.Models;
 using SBDProjekt.Infrastructure;
+using SBDProjekt.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +39,12 @@ namespace SBD_Projekt
             {
                 options.UseSqlServer(Configuration.GetConnectionString("MyDB"));
             });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Clients/Login";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,11 +62,10 @@ namespace SBD_Projekt
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseSession();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
