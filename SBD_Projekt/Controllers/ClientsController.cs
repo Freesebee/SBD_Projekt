@@ -105,10 +105,10 @@
         }
 
         [Authorize]
-        public ActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Clear();//remove session
-            return RedirectToAction("Login");
+            await HttpContext.SignOutAsync();
+            return Redirect("/");
         }
 
         public static string GetMD5(string str)
