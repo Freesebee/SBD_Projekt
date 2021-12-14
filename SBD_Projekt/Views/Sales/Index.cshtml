@@ -38,6 +38,7 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
+                <a asp-controller="DiscountedProduct" asp-action="ProductsOnThisSale" asp-route-id="@item.Id">Products On This Sale</a> |
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
