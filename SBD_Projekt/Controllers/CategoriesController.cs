@@ -149,11 +149,5 @@ namespace SBD_Projekt.Controllers
         {
             return _context.Categories.Any(e => e.Id == id);
         }
-
-        public async Task<IActionResult> ShowProducts(int id)
-        {
-            var q = _context.Products.Where(c => c.CategoryId.Equals(id));
-            return View(await q.ToListAsync());
-        }
     }
 }
