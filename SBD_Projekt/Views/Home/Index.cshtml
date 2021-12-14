@@ -1,8 +1,44 @@
-﻿@{
+﻿@model IEnumerable<SBDProjekt.Models.DiscountedProduct>
+
+@{
     ViewData["Title"] = "Home Page";
 }
-
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    Promocje!
 </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            double discountPrice = Math.Round(item.Product.Price * (100 - item.Discount) /100, 2);
+            <tr>
+                <td>
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId">
+                        @Html.DisplayFor(modelItem => item.Product.Name)
+                    </a>
+                </td>
+                <td>
+                    <del>@Html.DisplayFor(modelItem => item.Product.Price)</del>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => discountPrice)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
