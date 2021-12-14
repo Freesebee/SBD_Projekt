@@ -5,44 +5,36 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1>Product Details</h1>
 
 <div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
+    <link href="~/css/product.css" rel="stylesheet" />
+    <div class="home-container">
+        <img alt="image"
+             src="https://icon-library.com/images/icon-product/icon-product-13.jpg"
+             class="home-image" />
+        <span class="home-text6">
             @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Details)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Details)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CategoryId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CategoryId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ManufacturerId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ManufacturerId)
-        </dd>
-    </dl>
+        </span>
+        <span class="home-text2">Price:</span>
+        <span class="home-text">
+            @Html.DisplayFor(model => model.Price)
+        </span>
+        <span class="home-text1">Category:</span>
+        <span class="home-text4">
+            Categoryname
+        </span>
+        <span class="home-text5">Producer:</span>
+        <span class="home-text3">ProducentWartosc</span>
+        <button class="home-button button">Like</button>
+
+        <div class="home-container1">
+            <div class="home-container2"></div>
+            <div class="home-container3"></div>
+        </div>
+    </div>
 </div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
