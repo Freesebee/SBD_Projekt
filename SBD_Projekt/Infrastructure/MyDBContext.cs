@@ -25,16 +25,12 @@ namespace SBDProjekt.Infrastructure
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Sale> Sales { get; set; }
+        public DbSet<DiscountedProduct> DiscountedProduct { get; set; }
+        public DbSet<FavouriteProduct> FavouriteProduct { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.Ignore<IdentityUserLogin<string>>();
-            //modelBuilder.Ignore<IdentityUserRole<string>>();
-            //modelBuilder.Ignore<IdentityUserClaim<string>>();
-            //modelBuilder.Ignore<IdentityUserToken<string>>();
-            //modelBuilder.Ignore<IdentityUser<string>>();
-            //modelBuilder.Ignore<ApplicationUser>();
 
             modelBuilder.Entity<Product>()
                 .HasMany(x => x.ProductEnjoyers)
@@ -64,11 +60,11 @@ namespace SBDProjekt.Infrastructure
                 .HasOne(op => op.Order)
                 .WithMany(p => p.OrderedProduct)
                 .HasForeignKey(op => op.OrderId);
+
+            modelBuilder.Entity<IdentityRole>()
+                .HasData(
+                    new IdentityRole { Name = "Admin", NormalizedName = "Admin".ToUpper() },
+                    new IdentityRole { Name = "User", NormalizedName = "User".ToUpper() });
         }
-
-        public DbSet<SBDProjekt.Models.DiscountedProduct> DiscountedProduct { get; set; }
-
-        public DbSet<SBDProjekt.Models.FavouriteProduct> FavouriteProduct { get; set; }
-        
     }
 }
