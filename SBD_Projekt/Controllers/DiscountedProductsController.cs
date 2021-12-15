@@ -19,13 +19,6 @@ namespace SBD_Projekt.Controllers
             _context = context;
         }
 
-        // GET: DiscountedProducts
-        public async Task<IActionResult> Index()
-        {
-            var myDBContext = _context.DiscountedProduct.Include(d => d.Product).Include(d => d.Sale);
-            return View(await myDBContext.ToListAsync());
-        }
-
         // GET: DiscountedProducts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -73,14 +66,14 @@ namespace SBD_Projekt.Controllers
         }
 
         // GET: DiscountedProducts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? productId, int? saleId)
         {
-            if (id == null)
+            if (productId == null || saleId == null)
             {
                 return NotFound();
             }
 
-            var discountedProduct = await _context.DiscountedProduct.FindAsync(id);
+            var discountedProduct = await _context.DiscountedProduct.FindAsync(productId, saleId);
             if (discountedProduct == null)
             {
                 return NotFound();

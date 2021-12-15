@@ -5,11 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1>@Model.Name details</h1>
 
 <div>
-    <h4>Sale</h4>
-    <hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
@@ -34,4 +32,46 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
+</div>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.DiscountedProducts)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => product.Name)
+                </td>
+                <td>
+                    <a asp-controller="DiscountedProducts" 
+                       asp-action="Edit" 
+                       asp-route-productId="@product.Id" 
+                       asp-route-saleId="@Model.Id">
+                        Edit
+                    </a> |
+                    <a asp-controller="DiscountedProducts" 
+                       asp-action="Details" 
+                       asp-route-id="@product.Id" 
+                       asp-route-saleId="@Model.Id">
+                        Details
+                    </a> |
+                    <a asp-controller="DiscountedProducts" 
+                       asp-action="Delete"
+                       asp-route-id="@product.Id"
+                       asp-route-saleId="@Model.Id">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
 </div>

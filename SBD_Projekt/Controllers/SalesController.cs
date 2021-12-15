@@ -35,9 +35,28 @@ namespace SBD_Projekt.Controllers
 
             var sale = await _context.Sales
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (sale == null)
             {
                 return NotFound();
+            }
+
+            List<DiscountedProduct> discountedProducts = await _context
+                .DiscountedProduct
+                .Where(p => p.SaleId == sale.Id)
+                .ToListAsync();
+
+
+            if (discountedProducts.Count > 0)
+            {
+                var list = new List<Product>();
+                foreach (DiscountedProduct discount in discountedProducts)
+                {
+                    Product product = _context.Products.Single(p => p.Id == discount.ProductId);
+                    list.Add(product);
+                }
+
+                sale.DiscountedProducts = list;
             }
 
             return View(sale);

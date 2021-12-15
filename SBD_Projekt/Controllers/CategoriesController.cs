@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SBD_Projekt.Models;
 using SBDProjekt.Infrastructure;
 using SBDProjekt.Models;
 
@@ -148,6 +149,15 @@ namespace SBD_Projekt.Controllers
         private bool CategoryExists(int id)
         {
             return _context.Categories.Any(e => e.Id == id);
+        }
+
+        
+        public async Task<IActionResult> SelectOptionsAsync()
+        {
+            EditProductViewModel model = new EditProductViewModel();
+            model.CategoryList = await _context.Categories.ToListAsync();
+            model.ManufacturerList = await _context.Manufacturers.ToListAsync();
+            return View(model);
         }
     }
 }

@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>All products</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -32,7 +32,8 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+   @foreach (var item in Model) 
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
@@ -55,6 +56,6 @@
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>

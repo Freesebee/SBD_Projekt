@@ -44,9 +44,12 @@ namespace SBD_Projekt.Controllers
         }
 
         // GET: Products/Create
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
-            return View();
+            EditProductViewModel model = new EditProductViewModel();
+            model.CategoryList = await _context.Categories.ToListAsync();
+            model.ManufacturerList = await _context.Manufacturers.ToListAsync();
+            return View(model);
         }
 
         // POST: Products/Create

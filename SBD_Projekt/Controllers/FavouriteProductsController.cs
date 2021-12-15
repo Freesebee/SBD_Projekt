@@ -28,6 +28,7 @@ namespace SBD_Projekt.Controllers
             return View(await myDBContext.ToListAsync());
         }
 
+        [Authorize]
         // GET: FavouriteProducts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -48,6 +49,7 @@ namespace SBD_Projekt.Controllers
             return View(favouriteProduct);
         }
 
+        [Authorize]
         // GET: FavouriteProducts/Create
         public IActionResult Create()
         {
@@ -61,6 +63,7 @@ namespace SBD_Projekt.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("ProductId,ClientId")] FavouriteProduct favouriteProduct)
         {
             if (ModelState.IsValid)
@@ -74,62 +77,7 @@ namespace SBD_Projekt.Controllers
             return View(favouriteProduct);
         }
 
-        // GET: FavouriteProducts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var favouriteProduct = await _context.FavouriteProduct.FindAsync(id);
-            if (favouriteProduct == null)
-            {
-                return NotFound();
-            }
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "Id", favouriteProduct.ClientId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id", favouriteProduct.ProductId);
-            return View(favouriteProduct);
-        }
-
-        // POST: FavouriteProducts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ClientId")] FavouriteProduct favouriteProduct)
-        {
-            if (id != favouriteProduct.ClientId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(favouriteProduct);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FavouriteProductExists(favouriteProduct.ClientId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "Id", favouriteProduct.ClientId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id", favouriteProduct.ProductId);
-            return View(favouriteProduct);
-        }
-
-        // GET: FavouriteProducts/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -152,6 +100,7 @@ namespace SBD_Projekt.Controllers
         // POST: FavouriteProducts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var favouriteProduct = await _context.FavouriteProduct.FindAsync(id);
