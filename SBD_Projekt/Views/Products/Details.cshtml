@@ -1,4 +1,4 @@
-﻿@model SBDProjekt.Models.Product
+﻿@model SBDProjekt.Models.DetailsProductViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -22,15 +22,43 @@
         </span>
         <span class="home-text1">Category:</span>
         <span class="home-text4">
-            Categoryname
+            @Model.CategoryName
         </span>
         <span class="home-text5">Producer:</span>
-        <span class="home-text3">ProducentWartosc</span>
+        <span class="home-text3">
+            @Model.ManufacturerName
+        </span>
         <button class="home-button button">Like</button>
 
         <div class="home-container1">
-            <div class="home-container2"></div>
-            <div class="home-container3"></div>
+            @*<div class="home-container2"></div>
+        <div class="home-container3"></div>*@
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.OpinionList[0].Rating)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.OpinionList[0].Content)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OpinionList)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Rating)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Content)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
