@@ -51,14 +51,14 @@ namespace SBD_Projekt
                     {
                         OnSigningIn = async context =>
                         {
-                            var principal = context.Principal;
-                            if (principal.HasClaim(c => c.Type == ClaimTypes.Email
-                                && principal.Claims.FirstOrDefault(
-                                    c => c.Type == ClaimTypes.Email).Value == "test@test.pl"))
-                            {
-                                var claimsIdentity = principal.Identity as ClaimsIdentity;
-                                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Tester"));
-                            }
+                            //var principal = context.Principal;
+                            //if (principal.HasClaim(c => c.Type == ClaimTypes.Email
+                            //    && principal.Claims.FirstOrDefault(
+                            //        c => c.Type == ClaimTypes.Email).Value == "test@mail.pl"))
+                            //{
+                            //    var claimsIdentity = principal.Identity as ClaimsIdentity;
+                            //    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+                            //}
                             await Task.CompletedTask;
                         }
                     };

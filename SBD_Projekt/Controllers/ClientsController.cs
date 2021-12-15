@@ -15,6 +15,7 @@
     using Microsoft.AspNetCore.Authentication;
     using System.Security.Claims;
     using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Identity;
 
     public class ClientsController : Controller
     {
@@ -76,15 +77,23 @@
             if (ModelState.IsValid)
             {
                 var f_password = GetMD5(password);
-                var data = _context.Users.Where(
+                var appUser = _context.Users.FirstOrDefault(
                     s => s.Email.Equals(email) 
-                    && s.Password.Equals(f_password)).ToList();
+                    && s.Password.Equals(f_password));
 
-                if (data.Count() > 0)
+                if (appUser != null)
                 {
                     var claims = new List<Claim>();
-                    claims.Add(new Claim("email", email));
                     claims.Add(new Claim(ClaimTypes.Email, email));
+
+                    var ur = _context.UserRoles.FirstOrDefault(ur => ur.UserId == appUser.Id);
+                    var r = _context.Roles.FirstOrDefault(r => r.NormalizedName == "ADMIN");
+
+                    if(ur != null && r != null && ur.RoleId == r.Id)
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+                    }
+
                     var claimsIdentity = new ClaimsIdentity(
                         claims,
                         CookieAuthenticationDefaults.AuthenticationScheme
