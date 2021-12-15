@@ -64,14 +64,14 @@ namespace SBD_Projekt
                     };
                 });
 
-            services.AddAuthorization(config =>
-            {
-                var userAuthPolicyBuilder = new AuthorizationPolicyBuilder();
-                config.DefaultPolicy = userAuthPolicyBuilder
-                                    .RequireAuthenticatedUser()
-                                    .RequireClaim(ClaimTypes.DateOfBirth)
-                                    .Build();
-            });
+            //services.AddAuthorization(config =>
+            //{
+            //    var userAuthPolicyBuilder = new AuthorizationPolicyBuilder();
+            //    config.DefaultPolicy = userAuthPolicyBuilder
+            //                        .RequireAuthenticatedUser()
+            //                        .RequireClaim(ClaimTypes.DateOfBirth)
+            //                        .Build();
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
