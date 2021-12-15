@@ -41,6 +41,7 @@ namespace SBD_Projekt.Controllers
                 .Include(f => f.Client)
                 .Include(f => f.Product)
                 .FirstOrDefaultAsync(m => m.ClientId == id);
+
             if (favouriteProduct == null)
             {
                 return NotFound();
@@ -59,8 +60,6 @@ namespace SBD_Projekt.Controllers
         }
 
         // POST: FavouriteProducts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -89,6 +88,7 @@ namespace SBD_Projekt.Controllers
                 .Include(f => f.Client)
                 .Include(f => f.Product)
                 .FirstOrDefaultAsync(m => m.ClientId == id);
+
             if (favouriteProduct == null)
             {
                 return NotFound();
