@@ -9,7 +9,6 @@ namespace SBDProjekt.Models
 {
     public class EditProductViewModel
     {
-        [Required]
         public int Id { get; set; }
 
         [Required]

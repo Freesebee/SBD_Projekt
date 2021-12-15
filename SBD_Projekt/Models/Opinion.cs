@@ -10,10 +10,19 @@
     {
         [Key]
         public int Id { get; set; }
+
+        [Required]
+        [StringLength(1000, MinimumLength = 1, ErrorMessage = "Content text length must be between 1 and 1000 characters")]
         public string Content { get; set; }
+
+        [Required]
+        [Range(1,5)]
         public int Rating { get; set; }
         
+        [Required]
         public int ClientId { get; set; }
+
+        [Required]
         public int ProductId { get; set; }
 
     }
