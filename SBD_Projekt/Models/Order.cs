@@ -10,7 +10,7 @@
     {
         [Key]
         public int Id { get; set; }
-        public int ClientId { get; set; }
+        public string ClientId { get; set; }
         public ICollection<OrderedProduct> OrderedProduct { get; set; }
     }
 }
