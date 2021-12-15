@@ -1,29 +1,31 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SBDProjekt.Infrastructure;
 using SBDProjekt.Models;
-using SBDProjekt.Models.ViewModels;
 
 namespace SBD_Projekt.Controllers
 {
-    public class CategoriesController : Controller
+    public class ManufacturersController : Controller
     {
         private readonly MyDBContext _context;
 
-        public CategoriesController(MyDBContext context)
+        public ManufacturersController(MyDBContext context)
         {
             _context = context;
         }
 
-        // GET: Categories
+        // GET: Manufacturers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            return View(await _context.Manufacturers.ToListAsync());
         }
 
-        // GET: Categories/Details/5
+        // GET: Manufacturers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -31,49 +33,39 @@ namespace SBD_Projekt.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
+            var manufacturer = await _context.Manufacturers
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
+            if (manufacturer == null)
             {
                 return NotFound();
             }
 
-            var categoryDetails = new CategoryDetailsViewModel();
-
-            categoryDetails.Id = category.Id;
-            categoryDetails.Name = category.Name;
-            categoryDetails.Description = category.Description;
-            categoryDetails.Products = await _context
-                .Products
-                .Where(p => p.CategoryId == category.Id)
-                .ToListAsync();
-
-            return View(categoryDetails);
+            return View(manufacturer);
         }
 
-        // GET: Categories/Create
+        // GET: Manufacturers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Manufacturers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Manufacturer manufacturer)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                _context.Add(manufacturer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(manufacturer);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Manufacturers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,22 +73,22 @@ namespace SBD_Projekt.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            var manufacturer = await _context.Manufacturers.FindAsync(id);
+            if (manufacturer == null)
             {
                 return NotFound();
             }
-            return View(category);
+            return View(manufacturer);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Manufacturers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Manufacturer manufacturer)
         {
-            if (id != category.Id)
+            if (id != manufacturer.Id)
             {
                 return NotFound();
             }
@@ -105,12 +97,12 @@ namespace SBD_Projekt.Controllers
             {
                 try
                 {
-                    _context.Update(category);
+                    _context.Update(manufacturer);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.Id))
+                    if (!ManufacturerExists(manufacturer.Id))
                     {
                         return NotFound();
                     }
@@ -121,10 +113,10 @@ namespace SBD_Projekt.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(manufacturer);
         }
 
-        // GET: Categories/Delete/5
+        // GET: Manufacturers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,39 +124,30 @@ namespace SBD_Projekt.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
+            var manufacturer = await _context.Manufacturers
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
+            if (manufacturer == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(manufacturer);
         }
 
-        // POST: Categories/Delete/5
+        // POST: Manufacturers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            _context.Categories.Remove(category);
+            var manufacturer = await _context.Manufacturers.FindAsync(id);
+            _context.Manufacturers.Remove(manufacturer);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private bool ManufacturerExists(int id)
         {
-            return _context.Categories.Any(e => e.Id == id);
-        }
-
-        
-        public async Task<IActionResult> SelectOptionsAsync()
-        {
-            EditProductViewModel model = new EditProductViewModel();
-            model.CategoryList = await _context.Categories.ToListAsync();
-            model.ManufacturerList = await _context.Manufacturers.ToListAsync();
-            return View(model);
+            return _context.Manufacturers.Any(e => e.Id == id);
         }
     }
 }

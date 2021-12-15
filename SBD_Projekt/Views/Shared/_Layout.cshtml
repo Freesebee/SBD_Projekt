@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@*@inject Microsoft.AspNetCore.Identity.SignInManager<SBDProjekt.Models.ApplicationUser> signInManager*@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -15,7 +16,7 @@
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"
                    style="font-weight: bold">
-                    <img src="~/Cybershop.png" style="max-height:60px;"/>
+                    <img src="~/Cybershop.png" style="max-height:60px;" />
                     CYBER-SHOP
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -36,11 +37,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">Cart</a>
                         </li>
+                        @*@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Manufacturer" asp-action="Index">Manufacturers</a>
+                            </li>
+                        }*@
                     </ul>
                 </div>
-                <button type="button">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Clients" asp-action="Login">Sign-In</a>
-                </button>
+                @*@if (signInManager.IsSignedIn(User))
+                {
+                    <button type="button">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Clients" asp-action="Logout">Sign-Out</a>
+                    </button>
+                }
+                else
+                {
+                    <button type="button">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Clients" asp-action="Login">Sign-In</a>
+                    </button>
+                }*@
             </div>
         </nav>
     </header>
