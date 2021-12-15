@@ -17,7 +17,7 @@ namespace SBD_Projekt.Migrations
                 columns: table => new
                 {
                     FavouriteProductsId = table.Column<int>(type: "int", nullable: false),
-                    ProductEnjoyersId = table.Column<int>(type: "int", nullable: false)
+                    ProductEnjoyersId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -84,7 +84,7 @@ namespace SBD_Projekt.Migrations
                 name: "FavouriteProduct",
                 columns: table => new
                 {
-                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    ClientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

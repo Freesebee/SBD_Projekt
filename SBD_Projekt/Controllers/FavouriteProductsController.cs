@@ -30,7 +30,7 @@ namespace SBD_Projekt.Controllers
 
         [Authorize]
         // GET: FavouriteProducts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
@@ -78,7 +78,7 @@ namespace SBD_Projekt.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
@@ -109,7 +109,7 @@ namespace SBD_Projekt.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FavouriteProductExists(int id)
+        private bool FavouriteProductExists(string id)
         {
             return _context.FavouriteProduct.Any(e => e.ClientId == id);
         }

@@ -18,11 +18,9 @@
         [Required]
         [Range(1,5)]
         public int Rating { get; set; }
-        
         [Required]
-        public int ClientId { get; set; }
 
-        [Required]
+        public string ClientId { get; set; }
         public int ProductId { get; set; }
 
     }

@@ -24,7 +24,6 @@ namespace SBD_Projekt.Controllers
         {
             return View(await _context.Products.ToListAsync());
         }
-
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -40,7 +39,21 @@ namespace SBD_Projekt.Controllers
                 return NotFound();
             }
 
-            return View(product);
+            DetailsProductViewModel model = new DetailsProductViewModel();
+            model.CategoryName = _context
+                .Categories
+                .Single(p => p.Id == product.CategoryId).Name;
+
+            model.ManufacturerName = _context
+                .Manufacturers
+                .Single(p => p.Id == product.ManufacturerId).Name;
+            model.Id = product.Id;
+            model.ManufacturerId = product.ManufacturerId;
+            model.Name = product.Name;
+            model.Price = product.Price;
+            model.OpinionList = _context.Opinions.ToList();
+
+            return View(model);
         }
 
         // GET: Products/Create
@@ -50,6 +63,8 @@ namespace SBD_Projekt.Controllers
             model.CategoryList = await _context.Categories.ToListAsync();
             model.ManufacturerList = await _context.Manufacturers.ToListAsync();
             return View(model);
+
+
         }
 
         // POST: Products/Create

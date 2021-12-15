@@ -9,7 +9,7 @@
     public class Client
     {
         [Key]
-        public int Id { get; set; }
+        public string Id { get; set; }
         [Required]
         [StringLength(50, MinimumLength = 3)]
         public string Username { get; set; }
