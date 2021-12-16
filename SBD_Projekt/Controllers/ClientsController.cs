@@ -47,10 +47,21 @@
             if (ModelState.IsValid)
             {
                 var check = _context.Clients.FirstOrDefault(s => s.Email == user.Email);
+
+                var client = new Client();
+
                 if (check == null)
                 {
                     user.Password = GetMD5(user.Password);
+
+                    client.Id = user.Id;
+                    client.Password = user.Password;
+                    client.Email = user.Email;
+                    client.Username = user.UserName;
+
                     _context.Users.Add(user);
+                    _context.Clients.Add(client);
+
                     _context.SaveChanges();
                     return RedirectToAction("Index");
                 }
