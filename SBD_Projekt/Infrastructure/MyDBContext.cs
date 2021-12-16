@@ -1,14 +1,7 @@
-﻿using SBDProjekt.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
-using SBD_Projekt.Models;
+using SBDProjekt.Models;
 
 namespace SBDProjekt.Infrastructure
 {
