@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,25 +53,29 @@ namespace SBD_Projekt.Controllers
         // GET: FavouriteProducts/Create
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "Id");
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id");
+            
             return View();
         }
 
         // POST: FavouriteProducts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,ClientId")] FavouriteProduct favouriteProduct)
+        public async Task<IActionResult> Create(int productId)
         {
+            FavouriteProduct favouriteProduct = new FavouriteProduct();
             if (ModelState.IsValid)
             {
+                favouriteProduct.ProductId = productId;
+                //var usernameFromContext = HttpContext.User.Identity.Name;
+                //Client client = _context.Clients.Single(p => p.Username == usernameFromContext);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                favouriteProduct.ClientId = userId;
                 _context.Add(favouriteProduct);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "Id", favouriteProduct.ClientId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id", favouriteProduct.ProductId);
-            return View(favouriteProduct);
+            
+            return View();
         }
 
         public async Task<IActionResult> Delete(string id)

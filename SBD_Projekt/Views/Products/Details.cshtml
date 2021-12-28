@@ -28,15 +28,14 @@
         <span class="home-text3">
             @Model.ManufacturerName
         </span>
-        <button class="home-button button">
-            <a 
+            <form 
                asp-controller="FavouriteProducts"
                asp-action="Create" 
-               asp-route-userId=""
                asp-route-productId="@Model.Id">
-                LIKE
-            </a>
-        </button>
+
+               <button type = "submit"> LIKE </button>
+
+            </form>
 
         <div class="home-container1">
             @*<div class="home-container2"></div>
