@@ -11,6 +11,7 @@ using SBDProjekt.Models;
 
 namespace SBD_Projekt.Controllers
 {
+    [Authorize]
     public class FavouriteProductsController : Controller
     {
         private readonly MyDBContext _context;
@@ -21,14 +22,12 @@ namespace SBD_Projekt.Controllers
         }
 
         // GET: FavouriteProducts
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             var myDBContext = _context.FavouriteProduct.Include(f => f.Client).Include(f => f.Product);
             return View(await myDBContext.ToListAsync());
         }
 
-        [Authorize]
         // GET: FavouriteProducts/Details/5
         public async Task<IActionResult> Details(string id)
         {
@@ -50,7 +49,6 @@ namespace SBD_Projekt.Controllers
             return View(favouriteProduct);
         }
 
-        [Authorize]
         // GET: FavouriteProducts/Create
         public IActionResult Create()
         {
@@ -62,7 +60,6 @@ namespace SBD_Projekt.Controllers
         // POST: FavouriteProducts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> Create([Bind("ProductId,ClientId")] FavouriteProduct favouriteProduct)
         {
             if (ModelState.IsValid)
@@ -76,7 +73,6 @@ namespace SBD_Projekt.Controllers
             return View(favouriteProduct);
         }
 
-        [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -100,7 +96,6 @@ namespace SBD_Projekt.Controllers
         // POST: FavouriteProducts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var favouriteProduct = await _context.FavouriteProduct.FindAsync(id);
