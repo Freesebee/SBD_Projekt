@@ -96,6 +96,7 @@
                 {
                     var claims = new List<Claim>();
                     claims.Add(new Claim(ClaimTypes.Email, email));
+                    claims.Add(new Claim(ClaimTypes.NameIdentifier, appUser.Id));
 
                     var ur = _context.UserRoles.FirstOrDefault(ur => ur.UserId == appUser.Id);
                     var r = _context.Roles.FirstOrDefault(r => r.NormalizedName == "ADMIN");
