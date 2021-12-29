@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<SBDProjekt.Models.FavouriteProduct>
+@using System.Security.Claims;
 
 @{
     ViewData["Title"] = "Index";
@@ -13,27 +14,30 @@
             <th>
                 @Html.DisplayNameFor(model => model.Product)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Client)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Client.Id)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-controller="Products"
+                       asp-action="Details"
+                       asp-route-id="@item.ProductId">
+                        @Html.DisplayFor(modelItem => item.Product.Name)
+                    </a>
+
+                </td>
+                <td>
+                    <form asp-action="Delete"
+                          asp-route-productId="@item.ProductId">
+                        <button type="submit"> Delete </button>
+
+                    </form>
+
+                </td>
+            </tr>
+        }   
     </tbody>
 </table>

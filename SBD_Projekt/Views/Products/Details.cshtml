@@ -29,10 +29,8 @@
             @Model.ManufacturerName
         </span>
             <form 
-               asp-controller="FavouriteProducts"
-               asp-action="Create" 
+               asp-action="AddToFavourites" 
                asp-route-productId="@Model.Id">
-
                <button type = "submit"> LIKE </button>
 
             </form>

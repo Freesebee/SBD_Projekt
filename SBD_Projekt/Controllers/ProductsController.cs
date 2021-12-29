@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ using SBDProjekt.Models;
 
 namespace SBD_Projekt.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly MyDBContext _context;
@@ -59,6 +60,7 @@ namespace SBD_Projekt.Controllers
         }
 
         // GET: Products/Create
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAsync()
         {
             EditProductViewModel model = new EditProductViewModel();
@@ -74,6 +76,7 @@ namespace SBD_Projekt.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,Price,Name,Details,CategoryId,ManufacturerId")] Product product)
         {
             if (ModelState.IsValid)
@@ -86,6 +89,7 @@ namespace SBD_Projekt.Controllers
         }
 
         // GET: Products/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -106,6 +110,7 @@ namespace SBD_Projekt.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Price,Name,Details,CategoryId,ManufacturerId")] Product product)
         {
             if (id != product.Id)
@@ -137,6 +142,7 @@ namespace SBD_Projekt.Controllers
         }
 
         // GET: Products/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -157,6 +163,7 @@ namespace SBD_Projekt.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Products.FindAsync(id);
@@ -168,6 +175,29 @@ namespace SBD_Projekt.Controllers
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> AddToFavourites(int productId)
+        {
+            FavouriteProduct favouriteProduct = new FavouriteProduct();
+            if (ModelState.IsValid && !FavouriteProductExists(productId, User.FindFirstValue(ClaimTypes.NameIdentifier)))
+            {
+                favouriteProduct.ProductId = productId;
+                //var usernameFromContext = HttpContext.User.Identity.Name;
+                //Client client = _context.Clients.Single(p => p.Username == usernameFromContext);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                favouriteProduct.ClientId = userId;
+                _context.Add(favouriteProduct);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", new { id = productId });
+            }
+
+            return RedirectToAction("Details", new { id = productId });
+        }
+
+        private bool FavouriteProductExists(int productId, string clientId)
+        {
+            return _context.FavouriteProduct.Any(e => e.ProductId == productId && e.ClientId == clientId);
         }
     }
 }
