@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -57,13 +58,20 @@ namespace SBD_Projekt.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,Content,Rating,ClientId,ProductId")] Opinion opinion)
+        public async Task<IActionResult> Create([Bind("Id")] int productId, string content, int rating)
         {
+            Opinion opinion = new Opinion();
+            opinion.ProductId = productId;
+            opinion.Content = content;
+            opinion.Rating = rating;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            opinion.ClientId = userId;
+
             if (ModelState.IsValid)
             {
                 _context.Add(opinion);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new { id = productId });
             }
             return View(opinion);
         }
