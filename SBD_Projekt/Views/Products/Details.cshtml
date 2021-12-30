@@ -32,14 +32,14 @@
               asp-route-productId="@Model.Id">
             <button type="submit"> LIKE </button>
         </form>
-        @*<form asp-controller="Opinions"
-              asp-action="Create"
-              asp-route-productId="@Model.Id">
-            <button type="submit"> Add opinion </button>
-        </form>*@
-        <a asp-controller="Opinions"
-           asp-action="Create"
+     
+        <a asp-action="Create"
+           asp-controller="Opinions"
            asp-route-productId="@Model.Id">Add opinion</a>
+
+        @*@Html.ActionLink("Add opinion",
+                 "Create", "Opinions",
+                 new { productId = Model.Id })*@
 
         <div class="home-container1">
             @*<div class="home-container2"></div>

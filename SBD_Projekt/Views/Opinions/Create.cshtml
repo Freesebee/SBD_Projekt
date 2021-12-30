@@ -22,6 +22,7 @@
                 <input asp-for="Rating" class="form-control" />
                 <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
+            @Html.HiddenFor(x => x.ProductId) @*very important to remember*@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

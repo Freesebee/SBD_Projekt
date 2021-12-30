@@ -54,7 +54,7 @@ namespace SBD_Projekt.Controllers
             model.ManufacturerId = product.ManufacturerId;
             model.Name = product.Name;
             model.Price = product.Price;
-            model.OpinionList = _context.Opinions.ToList();
+            model.OpinionList = _context.Opinions.Where(p => p.ProductId == id).ToList(); //naprawic zeby bralo opinie tylko danego productid
 
             return View(model);
         }

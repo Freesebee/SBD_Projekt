@@ -47,7 +47,7 @@ namespace SBD_Projekt.Controllers
 
         // GET: Opinions/Create
         [Authorize]
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int? productId)
         {
             return View();
         }
@@ -58,7 +58,7 @@ namespace SBD_Projekt.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id")] int productId, string content, int rating)
+        public async Task<IActionResult> Create(int productId, string content, int rating)
         {
             Opinion opinion = new Opinion();
             opinion.ProductId = productId;
