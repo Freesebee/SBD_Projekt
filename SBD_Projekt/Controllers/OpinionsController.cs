@@ -71,7 +71,7 @@ namespace SBD_Projekt.Controllers
             {
                 _context.Add(opinion);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", new { id = productId });
+                return RedirectToAction("Details","Products", new { id = productId });
             }
             return View(opinion);
         }

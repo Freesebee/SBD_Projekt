@@ -30,9 +30,11 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@*<div>
+    <a asp-action="Details"
+       asp-controller="Products"
+       asp-route-id="@Model.ProductId">Back to the Product</a>
+</div>*@ @*nie przekazuje productId*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
