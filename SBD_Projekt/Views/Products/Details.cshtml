@@ -32,9 +32,10 @@
                asp-action="AddToFavourites" 
                asp-route-productId="@Model.Id">
                <button type = "submit"> LIKE </button>
-
             </form>
 
+            <input type="button" id="addToCartBtn" value="Add to cart" />
+        
         <div class="home-container1">
             @*<div class="home-container2"></div>
         <div class="home-container3"></div>*@
@@ -72,3 +73,26 @@
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#addToCartBtn").click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Products/AddToCart",
+                    data: { "productId": @Model.Id },
+                    success: function (response) {
+                        //alert("Hello: " + response.Name + " .\nCurrent Date and Time: " + response.DateTime);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}

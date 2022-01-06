@@ -34,7 +34,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="FavouriteProducts" asp-action="Index">Favourites</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">Cart</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Cart">Cart</a>
                         </li>
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                         {
