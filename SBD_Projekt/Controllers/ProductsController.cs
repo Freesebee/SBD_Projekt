@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using SBD_Projekt.Consts;
+using SBDProjekt.Infrastructure;
+using SBDProjekt.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using SBDProjekt.Infrastructure;
-using SBDProjekt.Models;
 
 namespace SBD_Projekt.Controllers
 {
-    [Authorize]
     public class ProductsController : Controller
     {
         private readonly MyDBContext _context;
@@ -22,12 +22,12 @@ namespace SBD_Projekt.Controllers
             _context = context;
         }
 
-        // GET: Products
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Products.ToListAsync());
         }
-        // GET: Products/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -177,6 +177,7 @@ namespace SBD_Projekt.Controllers
             return _context.Products.Any(e => e.Id == id);
         }
 
+        [Authorize]
         public async Task<IActionResult> AddToFavourites(int productId)
         {
             FavouriteProduct favouriteProduct = new FavouriteProduct();
@@ -198,6 +199,100 @@ namespace SBD_Projekt.Controllers
         private bool FavouriteProductExists(int productId, string clientId)
         {
             return _context.FavouriteProduct.Any(e => e.ProductId == productId && e.ClientId == clientId);
+        }
+
+        public IActionResult Cart()
+        {
+            return View(_GetCartProducts());
+        }
+
+        public JsonResult AddToCart(int productId)
+        {
+            List<OrderedProduct> cart;
+
+            if (HttpContext.Session.GetString(SessionConsts.CartKey) == null)
+            {
+                cart = new List<OrderedProduct>();
+            }
+            else
+            {
+                cart = _GetCartProducts();
+            }
+
+            OrderedProduct existingOrder = null;
+
+            if (cart.Count > 0)
+            { 
+                existingOrder = cart.Find(op => op.ProductId == productId);
+            }
+
+            if (existingOrder != null)
+            {
+                existingOrder.Quantity++;
+            }
+            else
+            {
+                var order = new OrderedProduct();
+                order.Product = _context.Products.Find(productId);
+                order.ProductId = order.Product.Id;
+                order.Quantity = 1;
+                cart.Add(order);
+            }
+            
+            HttpContext.Session.SetString(SessionConsts.CartKey, JsonConvert.SerializeObject(cart));
+
+            return Json(cart);
+        }
+
+        public JsonResult RemoveFromCart(int productId)
+        {
+            List<OrderedProduct> cart;
+
+            if (HttpContext.Session.GetString(SessionConsts.CartKey) == null)
+            {
+                cart = new List<OrderedProduct>();
+            }
+            else
+            {
+                cart = _GetCartProducts();
+            }
+
+            OrderedProduct existingOrder = null;
+
+            if (cart.Count > 0)
+            {
+                existingOrder = cart.Find(op => op.ProductId == productId);
+            }
+
+            if (existingOrder != null)
+            {
+                if(existingOrder.Quantity > 1)
+                {
+                    existingOrder.Quantity--;
+                }
+                else
+                {
+                    cart.RemoveAll(p => p.ProductId == productId);
+                }
+                
+                HttpContext.Session.SetString(SessionConsts.CartKey, JsonConvert.SerializeObject(cart));
+            }
+
+            return Json(cart);
+        }
+
+        private List<OrderedProduct> _GetCartProducts()
+        {
+            var cart = HttpContext.Session.GetString(SessionConsts.CartKey);
+
+            if (cart != null)
+            {
+                return JsonConvert.DeserializeObject<List<OrderedProduct>>(cart);
+            }
+            else
+            {
+                return new List<OrderedProduct>();
+            }
         }
     }
 }
