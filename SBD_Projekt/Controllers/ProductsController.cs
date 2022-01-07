@@ -25,7 +25,11 @@ namespace SBD_Projekt.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Products.ToListAsync());
+            return View(await _context.Products
+                .Include(p => p.Manufacturer)
+                .Include(p => p.Category)
+                .ToListAsync()
+            );
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -66,9 +70,8 @@ namespace SBD_Projekt.Controllers
             EditProductViewModel model = new EditProductViewModel();
             model.CategoryList = await _context.Categories.ToListAsync();
             model.ManufacturerList = await _context.Manufacturers.ToListAsync();
+
             return View(model);
-
-
         }
 
         // POST: Products/Create
@@ -102,7 +105,20 @@ namespace SBD_Projekt.Controllers
             {
                 return NotFound();
             }
-            return View(product);
+
+            EditProductViewModel model = new EditProductViewModel()
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                CategoryId = product.CategoryId,
+                CategoryList = await _context.Categories.ToListAsync(),
+                ManufacturerId = product.ManufacturerId,
+                ManufacturerList = await _context.Manufacturers.ToListAsync(),
+                Details = product.Details
+            };
+
+            return View(model);
         }
 
         // POST: Products/Edit/5
@@ -208,6 +224,8 @@ namespace SBD_Projekt.Controllers
 
         public JsonResult AddToCart(int productId)
         {
+            if (_context.Products.Find(productId) == null) return Json(NotFound("Product with this ID was not found"));
+
             List<OrderedProduct> cart;
 
             if (HttpContext.Session.GetString(SessionConsts.CartKey) == null)
@@ -222,7 +240,7 @@ namespace SBD_Projekt.Controllers
             OrderedProduct existingOrder = null;
 
             if (cart.Count > 0)
-            { 
+            {
                 existingOrder = cart.Find(op => op.ProductId == productId);
             }
 
@@ -238,14 +256,16 @@ namespace SBD_Projekt.Controllers
                 order.Quantity = 1;
                 cart.Add(order);
             }
-            
+
             HttpContext.Session.SetString(SessionConsts.CartKey, JsonConvert.SerializeObject(cart));
 
             return Json(cart);
         }
 
-        public JsonResult RemoveFromCart(int productId)
+        public IActionResult RemoveFromCart(int productId)
         {
+            if (_context.Products.Find(productId) == null) return NotFound("Product with this ID was not found");
+
             List<OrderedProduct> cart;
 
             if (HttpContext.Session.GetString(SessionConsts.CartKey) == null)
@@ -266,7 +286,7 @@ namespace SBD_Projekt.Controllers
 
             if (existingOrder != null)
             {
-                if(existingOrder.Quantity > 1)
+                if (existingOrder.Quantity > 1)
                 {
                     existingOrder.Quantity--;
                 }
@@ -274,25 +294,18 @@ namespace SBD_Projekt.Controllers
                 {
                     cart.RemoveAll(p => p.ProductId == productId);
                 }
-                
+
                 HttpContext.Session.SetString(SessionConsts.CartKey, JsonConvert.SerializeObject(cart));
             }
 
-            return Json(cart);
+            return View("Cart", cart);
         }
 
-        private List<OrderedProduct> _GetCartProducts()
+        public List<OrderedProduct> _GetCartProducts()
         {
             var cart = HttpContext.Session.GetString(SessionConsts.CartKey);
 
-            if (cart != null)
-            {
-                return JsonConvert.DeserializeObject<List<OrderedProduct>>(cart);
-            }
-            else
-            {
-                return new List<OrderedProduct>();
-            }
+            return cart != null ? JsonConvert.DeserializeObject<List<OrderedProduct>>(cart) : null;
         }
     }
 }

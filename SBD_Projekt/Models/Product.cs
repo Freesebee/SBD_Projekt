@@ -26,8 +26,13 @@
         [Required]
         public int CategoryId { get; set; }
 
+        public Category Category { get; set; }
+
         [Required]
         public int ManufacturerId { get; set; }
+
+        public Manufacturer Manufacturer { get; set; }
+
         public ICollection<Client> ProductEnjoyers { get; set;}
         public ICollection<OrderedProduct> OrderedProducts { get; set; }
         public ICollection<Sale> Sales { get; set; }
