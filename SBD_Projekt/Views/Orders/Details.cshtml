@@ -1,0 +1,47 @@
+﻿@model SBDProjekt.Models.Order
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Order @Model.Id</h4>
+    <hr />
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.OrderedProduct.First().Product.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.OrderedProduct.First().Product.Price)</th>
+            <th>@Html.DisplayNameFor(model => model.OrderedProduct.First().Quantity)</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderedProduct)
+        {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Product.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.Product.Price)</td>
+            <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+            <td>@Math.Round(item.Quantity * item.Product.Price, 2)</td>
+            <td>
+                <a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>Total:</th>
+            <th>@Math.Round(Model.OrderedProduct.Sum(op => op.Product.Price * op.Quantity), 2)</th>
+        </tr>
+    </tfoot>
+</table>

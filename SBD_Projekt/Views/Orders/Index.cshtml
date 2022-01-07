@@ -1,0 +1,35 @@
+﻿@model IEnumerable<SBDProjekt.Models.Order>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Your orders</h1>
+@{
+    if (Model != null && Model.Count() > 0)
+    {
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Order Identifier</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h4>You haven't ordered anything yet</h4>
+    }
+}
