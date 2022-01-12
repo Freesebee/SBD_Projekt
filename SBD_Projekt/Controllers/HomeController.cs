@@ -26,7 +26,7 @@ namespace SBD_Projekt.Controllers
 
         public async Task<IActionResult> IndexAsync()
         {
-            List<DiscountedProduct> sampleDiscounts = await _context.DiscountedProduct.ToListAsync();
+            List<DiscountedProduct> sampleDiscounts = _context.DiscountedProduct.ToList();
             foreach (var item in sampleDiscounts)
             {
                 item.Product = await _context.Products.SingleAsync(p => p.Id == item.ProductId);

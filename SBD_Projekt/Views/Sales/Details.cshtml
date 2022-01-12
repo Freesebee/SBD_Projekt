@@ -9,22 +9,22 @@
 
 <div>
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.StartDate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.StartDate)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.EndDate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.EndDate)
         </dd>
     </dl>
@@ -33,45 +33,52 @@
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
-<div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var product in Model.DiscountedProducts)
-            {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => product.Name)
-                </td>
-                <td>
-                    <a asp-controller="DiscountedProducts" 
-                       asp-action="Edit" 
-                       asp-route-productId="@product.Id" 
-                       asp-route-saleId="@Model.Id">
-                        Edit
-                    </a> |
-                    <a asp-controller="Products" 
-                       asp-action="Details" 
-                       asp-route-id="@product.Id" 
-                       asp-route-saleId="@Model.Id">
-                        Details
-                    </a> |
-                    <a asp-controller="DiscountedProducts" 
-                       asp-action="Delete"
-                       asp-route-id="@product.Id"
-                       asp-route-saleId="@Model.Id">
-                        Delete
-                    </a>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
-</div>
+@if (Model.DiscountedProducts == null || Model.DiscountedProducts.Count <= 0)
+{
+    <h4>There are no products on this sale</h4>
+}
+else
+{
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model.DiscountedProducts)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => product.Name)
+                        </td>
+                        <td>
+                            <a asp-controller="DiscountedProducts"
+                               asp-action="Edit"
+                               asp-route-productId="@product.Id"
+                               asp-route-saleId="@Model.Id">
+                                Edit
+                            </a> |
+                            <a asp-controller="Products"
+                               asp-action="Details"
+                               asp-route-id="@product.Id"
+                               asp-route-saleId="@Model.Id">
+                                Details
+                            </a> |
+                            <a asp-controller="DiscountedProducts"
+                               asp-action="Delete"
+                               asp-route-id="@product.Id"
+                               asp-route-saleId="@Model.Id">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

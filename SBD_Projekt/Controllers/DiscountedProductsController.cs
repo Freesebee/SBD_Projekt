@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SBDProjekt.Infrastructure;
 using SBDProjekt.Models;
+using SBDProjekt.Models.ViewModels;
 
 namespace SBD_Projekt.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class DiscountedProductsController : Controller
     {
         private readonly MyDBContext _context;
@@ -31,6 +34,7 @@ namespace SBD_Projekt.Controllers
                 .Include(d => d.Product)
                 .Include(d => d.Sale)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
+
             if (discountedProduct == null)
             {
                 return NotFound();
@@ -40,11 +44,16 @@ namespace SBD_Projekt.Controllers
         }
 
         // GET: DiscountedProducts/Create
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync(int? productId)
         {
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id");
-            ViewData["SaleId"] = new SelectList(_context.Sales, "Id", "Id");
-            return View();
+            if (productId == null)
+                return NotFound("Product not found");
+
+            EditDiscountedProductViewModel model = new EditDiscountedProductViewModel();
+            model.SaleList = await _context.Sales.ToListAsync();
+            model.ProductId = (int)productId;
+
+            return View(model);
         }
 
         // POST: DiscountedProducts/Create
@@ -52,7 +61,7 @@ namespace SBD_Projekt.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SaleId,ProductId")] DiscountedProduct discountedProduct)
+        public async Task<IActionResult> Create([Bind("SaleId,ProductId,Discount")] DiscountedProduct discountedProduct)
         {
             if (ModelState.IsValid)
             {
