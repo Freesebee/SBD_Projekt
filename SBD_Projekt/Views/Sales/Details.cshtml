@@ -57,24 +57,21 @@ else
                             @Html.DisplayFor(modelItem => product.Name)
                         </td>
                         <td>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
                             <a asp-controller="DiscountedProducts"
                                asp-action="Edit"
                                asp-route-productId="@product.Id"
                                asp-route-saleId="@Model.Id">
-                                Edit
-                            </a> |
-                            <a asp-controller="Products"
-                               asp-action="Details"
-                               asp-route-id="@product.Id"
-                               asp-route-saleId="@Model.Id">
-                                Details
-                            </a> |
+                                Edit |
+                            </a>
                             <a asp-controller="DiscountedProducts"
-                               asp-action="Delete"
-                               asp-route-id="@product.Id"
-                               asp-route-saleId="@Model.Id">
+                                  asp-action = "Delete"
+                                  asp-route-id = "@product.Id"
+                                  asp-route-saleId = "@Model.Id" >
                                 Delete
                             </a>
+                        }
                         </td>
                     </tr>
                 }

@@ -1,4 +1,4 @@
-﻿@model SBDProjekt.Models.DiscountedProduct
+﻿@model SBDProjekt.Models.ViewModels.EditDiscountedProductViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -11,19 +11,31 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="SaleId" />
-            <input type="hidden" asp-for="ProductId" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label asp-for="Discount" class="control-label"></label>
+                <input asp-for="Discount" />
+                <span asp-validation-for="Discount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SaleId" class="control-label">Sale</label>
+                <select id="drpEmpList" class="form-control" asp-for="SaleId"
+                        asp-items="@(new SelectList(Model.SaleList, "Id", "Name"))">
+                </select>
+                <input type="hidden" asp-for="SaleId" />
+                <span asp-validation-for="SaleId" class="text-danger"></span>
+            </div>
+            @Html.HiddenFor(m => m.ProductId)
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId">Back to Product</a>
 </div>
 
 @section Scripts {

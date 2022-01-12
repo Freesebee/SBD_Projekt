@@ -22,27 +22,6 @@ namespace SBD_Projekt.Controllers
             _context = context;
         }
 
-        // GET: DiscountedProducts/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var discountedProduct = await _context.DiscountedProduct
-                .Include(d => d.Product)
-                .Include(d => d.Sale)
-                .FirstOrDefaultAsync(m => m.ProductId == id);
-
-            if (discountedProduct == null)
-            {
-                return NotFound();
-            }
-
-            return View(discountedProduct);
-        }
-
         // GET: DiscountedProducts/Create
         public async Task<IActionResult> CreateAsync(int? productId)
         {
@@ -67,11 +46,9 @@ namespace SBD_Projekt.Controllers
             {
                 _context.Add(discountedProduct);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ProductsController.Details), new { id = discountedProduct.ProductId});
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id", discountedProduct.ProductId);
-            ViewData["SaleId"] = new SelectList(_context.Sales, "Id", "Id", discountedProduct.SaleId);
-            return View(discountedProduct);
+            return RedirectToAction(nameof(Create), new { productId = discountedProduct.ProductId });
         }
 
         // GET: DiscountedProducts/Edit/5
@@ -87,8 +64,7 @@ namespace SBD_Projekt.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id", discountedProduct.ProductId);
-            ViewData["SaleId"] = new SelectList(_context.Sales, "Id", "Id", discountedProduct.SaleId);
+
             return View(discountedProduct);
         }
 
@@ -97,7 +73,7 @@ namespace SBD_Projekt.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SaleId,ProductId")] DiscountedProduct discountedProduct)
+        public async Task<IActionResult> Edit(int id, [Bind("SaleId,ProductId,Discount")] DiscountedProduct discountedProduct)
         {
             if (id != discountedProduct.ProductId)
             {
@@ -124,23 +100,26 @@ namespace SBD_Projekt.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id", discountedProduct.ProductId);
-            ViewData["SaleId"] = new SelectList(_context.Sales, "Id", "Id", discountedProduct.SaleId);
             return View(discountedProduct);
         }
 
         // GET: DiscountedProducts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, int? saleId)
         {
             if (id == null)
             {
-                return NotFound();
+                return NotFound("Product not found");
+            }
+
+            if (saleId == null)
+            {
+                return NotFound("Sale not found");
             }
 
             var discountedProduct = await _context.DiscountedProduct
                 .Include(d => d.Product)
                 .Include(d => d.Sale)
-                .FirstOrDefaultAsync(m => m.ProductId == id);
+                .FirstOrDefaultAsync(m => m.ProductId == id && m.SaleId == saleId);
             if (discountedProduct == null)
             {
                 return NotFound();
@@ -152,12 +131,12 @@ namespace SBD_Projekt.Controllers
         // POST: DiscountedProducts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, int saleId)
         {
-            var discountedProduct = await _context.DiscountedProduct.FindAsync(id);
+            var discountedProduct = await _context.DiscountedProduct.FindAsync(id, saleId);
             _context.DiscountedProduct.Remove(discountedProduct);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(SalesController.Details), new { id = saleId });
         }
 
         private bool DiscountedProductExists(int id)
