@@ -28,17 +28,20 @@
         <span class="home-text3">
             @Model.ManufacturerName
         </span>
-            <form 
-               asp-action="AddToFavourites" 
-               asp-route-productId="@Model.Id">
-               <button type = "submit"> LIKE </button>
-            </form>
+        <form asp-action="AddToFavourites"
+              asp-route-productId="@Model.Id">
+            <button type="submit"> LIKE </button>
+        </form>
 
-            <input type="button" id="addToCartBtn" value="Add to cart" />
-        
+        <input type="button" id="addToCartBtn" value="Add to cart" />
+
+        <a asp-action="Create"
+           asp-controller="Opinions"
+           asp-route-productId="@Model.Id">Add opinion</a>
+
         <div class="home-container1">
             @*<div class="home-container2"></div>
-        <div class="home-container3"></div>*@
+            <div class="home-container3"></div>*@
             <table class="table">
                 <thead>
                     <tr>
