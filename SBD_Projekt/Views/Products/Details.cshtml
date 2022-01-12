@@ -8,6 +8,14 @@
 <h1>Product Details</h1>
 
 <div>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        <a asp-action="Index">Back to List</a>
+    }
+</div>
+
+<div>
     <link href="~/css/product.css" rel="stylesheet" />
     <div class="home-container">
         <img alt="image"
@@ -28,17 +36,16 @@
         <span class="home-text3">
             @Model.ManufacturerName
         </span>
-            <form 
-               asp-action="AddToFavourites" 
-               asp-route-productId="@Model.Id">
-               <button type = "submit"> LIKE </button>
-            </form>
+        <form asp-action="AddToFavourites"
+              asp-route-productId="@Model.Id">
+            <button type="submit"> LIKE </button>
+        </form>
 
-            <input type="button" id="addToCartBtn" value="Add to cart" />
-        
+        <input type="button" id="addToCartBtn" value="Add to cart" />
+
         <div class="home-container1">
             @*<div class="home-container2"></div>
-        <div class="home-container3"></div>*@
+                <div class="home-container3"></div>*@
             <table class="table">
                 <thead>
                     <tr>
@@ -69,10 +76,6 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     <script type="text/javascript">
