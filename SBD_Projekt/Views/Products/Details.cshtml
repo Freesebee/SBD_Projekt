@@ -42,7 +42,9 @@
         </form>
 
         <input type="button" id="addToCartBtn" value="Add to cart" />
-
+        <a asp-action="Create"
+           asp-controller="Opinions"
+           asp-route-productId="@Model.Id">Add opinion</a>
         <div class="home-container1">
             @*<div class="home-container2"></div>
                 <div class="home-container3"></div>*@
