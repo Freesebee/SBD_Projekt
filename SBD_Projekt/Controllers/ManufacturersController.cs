@@ -118,34 +118,47 @@ namespace SBD_Projekt.Controllers
             return View(manufacturer);
         }
 
-        // GET: Manufacturers/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        //GET: Manufacturers/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var manufacturer = await _context.Manufacturers
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (manufacturer == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (_context.Manufacturers.First(p => p.Id == id).Name == "Other")
+            {
+                return NotFound();
+            }
 
-        //    return View(manufacturer);
-        //}
+            var manufacturer = await _context.Manufacturers
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (manufacturer == null)
+            {
+                return NotFound();
+            }
 
-        // POST: Manufacturers/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var manufacturer = await _context.Manufacturers.FindAsync(id);
-        //    _context.Manufacturers.Remove(manufacturer);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+            return View(manufacturer);
+        }
+
+        //POST: Manufacturers/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var manufacturer = await _context.Manufacturers.FindAsync(id);
+            _context.Manufacturers.Remove(manufacturer);
+
+            var productsList = await _context.Products.Where(p => p.ManufacturerId == id).ToListAsync();
+            var manufacturerId = _context.Manufacturers.First(p => p.Name == "Other").Id;
+            foreach (Product product in productsList)
+            {
+                product.ManufacturerId = manufacturerId;
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
         private bool ManufacturerExists(int id)
         {
