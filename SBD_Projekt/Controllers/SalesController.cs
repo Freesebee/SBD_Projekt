@@ -69,6 +69,8 @@ namespace SBD_Projekt.Controllers
         {
             if (ModelState.IsValid)
             {
+                //TODO: Check if date is availabe
+
                 _context.Add(sale);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -108,6 +110,8 @@ namespace SBD_Projekt.Controllers
             {
                 try
                 {
+                    //TODO: Check if date is availabe
+
                     _context.Update(sale);
                     await _context.SaveChangesAsync();
                 }
