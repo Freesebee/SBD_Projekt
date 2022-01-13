@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,8 +47,10 @@ namespace SBD_Projekt.Controllers
 
         // GET: Opinions/Create
         [Authorize]
-        public IActionResult Create()
+        public IActionResult Create(int productId)
         {
+            ViewData["ProductId"] = productId;
+
             return View();
         }
 
@@ -61,9 +64,11 @@ namespace SBD_Projekt.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                opinion.ClientId = userId;
                 _context.Add(opinion);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Products", new { id = opinion.ProductId});
             }
             return View(opinion);
         }
@@ -149,7 +154,7 @@ namespace SBD_Projekt.Controllers
             var opinion = await _context.Opinions.FindAsync(id);
             _context.Opinions.Remove(opinion);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Products", new { id = opinion.ProductId });
         }
 
         private bool OpinionExists(int id)
