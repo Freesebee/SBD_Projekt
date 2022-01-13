@@ -44,9 +44,16 @@ namespace SBD_Projekt.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(discountedProduct);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(SalesController.Details), "Sales", new { id = discountedProduct.SaleId });
+                if (_context.DiscountedProduct.Any(x => x.ProductId == discountedProduct.ProductId && x.SaleId == discountedProduct.SaleId))
+                {
+                    return RedirectToAction(nameof(Create), new { productId = discountedProduct.ProductId });
+                }
+                else
+                {
+                    _context.Add(discountedProduct);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(SalesController.Details), "Sales", new { id = discountedProduct.SaleId });
+                }
             }
             return RedirectToAction(nameof(Create), new { productId = discountedProduct.ProductId });
         }
