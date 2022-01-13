@@ -77,7 +77,8 @@
         [HttpGet]
         public IActionResult Login(string returnUrl)
         {
-            ViewData["ReturnUrl"] = returnUrl;
+            var requestUrl = Request.Headers["Referer"].ToString();
+            ViewData["ReturnUrl"] = requestUrl;
             return View();
         }
 
