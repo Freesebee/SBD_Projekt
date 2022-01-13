@@ -154,7 +154,7 @@ namespace SBD_Projekt.Controllers
             var opinion = await _context.Opinions.FindAsync(id);
             _context.Opinions.Remove(opinion);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Products", new { id = opinion.ProductId });
         }
 
         private bool OpinionExists(int id)

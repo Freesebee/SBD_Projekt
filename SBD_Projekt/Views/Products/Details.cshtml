@@ -71,6 +71,13 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Content)
                             </td>
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <td>
+                                    <a asp-controller="Opinions" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                </td>
+                            }
+
                         </tr>
                     }
                 </tbody>
