@@ -30,7 +30,7 @@
                 <span asp-validation-for="Details" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
+                <label asp-for="CategoryId" class="control-label">Category</label>
                 <select id="drpEmpList" class="form-control" asp-for="CategoryId"
                         asp-items="@(new SelectList(Model.CategoryList, "Id", "Name"))">
                 </select>
@@ -38,7 +38,7 @@
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ManufacturerId" class="control-label"></label>
+                <label asp-for="ManufacturerId" class="control-label">Manufacturer</label>
                 <select id="drpEmpList" class="form-control" asp-for="ManufacturerId"
                         asp-items="@(new SelectList(Model.ManufacturerList, "Id", "Name"))">
                 </select>

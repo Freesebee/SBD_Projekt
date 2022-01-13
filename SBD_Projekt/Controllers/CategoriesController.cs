@@ -130,42 +130,42 @@ namespace SBD_Projekt.Controllers
         }
 
         // GET: Categories/Delete/5
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //[Authorize(Roles = "Admin")]
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
+        //    var category = await _context.Categories
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (category == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(category);
-        }
+        //    return View(category);
+        //}
 
         // POST: Categories/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var category = await _context.Categories.FindAsync(id);
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var category = await _context.Categories.FindAsync(id);
+        //    _context.Categories.Remove(category);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool CategoryExists(int id)
         {
             return _context.Categories.Any(e => e.Id == id);
         }
 
-        
+
         public async Task<IActionResult> SelectOptionsAsync()
         {
             EditProductViewModel model = new EditProductViewModel();
