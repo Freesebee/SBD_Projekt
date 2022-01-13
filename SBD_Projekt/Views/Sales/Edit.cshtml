@@ -29,6 +29,16 @@
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
+            @if (ViewBag.DateUnavailable != null)
+            {
+            <span class="text-danger">
+                Can't update the Sale duration - it conflicts with:
+                @foreach (var item in (ViewBag.DateUnavailable as IList<SBDProjekt.Models.Sale>))
+                {
+                    <p>@item.Name: @item.StartDate - @item.EndDate)</p>
+                }
+            </span>
+            }
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
