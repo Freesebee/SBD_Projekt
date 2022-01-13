@@ -69,10 +69,11 @@ namespace SBD_Projekt.Controllers
         {
             if (ModelState.IsValid)
             {
-                var conflictingSales = IsTimeAvailable(sale.StartDate, sale.EndDate);
+                List<Sale> conflictingSales = IsTimeAvailable(sale.StartDate, sale.EndDate);
 
                 if (conflictingSales != null)
                 {
+                    conflictingSales.RemoveAll(s => s.Id == sale.Id);
                     ViewBag.DateUnavailable = conflictingSales;
                     return View(sale);
                 }
@@ -116,10 +117,14 @@ namespace SBD_Projekt.Controllers
             {
                 try
                 {
-                    var conflictingSales = IsTimeAvailable(sale.StartDate, sale.EndDate);
+                    List<Sale> conflictingSales = IsTimeAvailable(sale.StartDate, sale.EndDate);
 
-                    if (conflictingSales != null)
+                    if (conflictingSales != null
+                        && (conflictingSales.Count > 1
+                            || (conflictingSales.Count == 1
+                                && conflictingSales.First().Id != sale.Id)))
                     {
+                        conflictingSales.RemoveAll(s => s.Id == sale.Id);
                         ViewBag.DateUnavailable = conflictingSales;
                         return View(sale);
                     }
@@ -183,12 +188,13 @@ namespace SBD_Projekt.Controllers
         /// Checks wheter time between dates is available in database
         /// </summary>
         /// <returns>Null if time between is available or Sale object which has conflicts</returns>
-        private IList<Sale> IsTimeAvailable(DateTime startDate, DateTime endDate)
+        private List<Sale> IsTimeAvailable(DateTime startDate, DateTime endDate)
         {
             var conflictingSales = _context.Sales
                 .Where(s => (
                     (s.StartDate >= startDate && s.StartDate <= endDate) 
                     || (s.EndDate >= startDate && s.EndDate <= endDate)))
+                .AsNoTracking()
                 .ToList();
 
             return conflictingSales == null || conflictingSales.Count == 0 ? null : conflictingSales;

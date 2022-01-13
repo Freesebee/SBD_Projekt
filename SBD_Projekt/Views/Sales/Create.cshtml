@@ -30,10 +30,12 @@
             </div>
             @if (ViewBag.DateUnavailable != null)
             {
-                var conflicting = (ViewBag.DateUnavailable as IList<SBDProjekt.Models.Sale>).First();
                 <span class="text-danger">
-                    Can't create Sale in this time interval - it conflicts with: 
-                    @conflicting.Name (@conflicting.StartDate - @conflicting.EndDate)
+                    Can't create the Sale in this time interval - it conflicts with:
+                    @foreach (var item in (ViewBag.DateUnavailable as IList<SBDProjekt.Models.Sale>))
+                    {
+                    <p>@item.Name: @item.StartDate - @item.EndDate)</p>
+                    }
                 </span>
             }
             <div class="form-group">
