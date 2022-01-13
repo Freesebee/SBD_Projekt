@@ -66,13 +66,11 @@ namespace SBD_Projekt.Controllers
                 return NotFound();
             }
 
-            var discountedProduct = await _context.DiscountedProduct.FindAsync(productId, saleId);
-            if (discountedProduct == null)
-            {
-                return NotFound();
-            }
+            EditDiscountedProductViewModel model = new EditDiscountedProductViewModel();
+            model.SaleList = await _context.Sales.ToListAsync();
+            model.ProductId = (int)productId;
 
-            return View(discountedProduct);
+            return View(model);
         }
 
         // POST: DiscountedProducts/Edit/5
@@ -80,9 +78,9 @@ namespace SBD_Projekt.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SaleId,ProductId,Discount")] DiscountedProduct discountedProduct)
+        public async Task<IActionResult> Edit(int ProductId, int SaleId, [Bind("SaleId,ProductId,Discount")] DiscountedProduct discountedProduct)
         {
-            if (id != discountedProduct.ProductId)
+            if (ProductId != discountedProduct.ProductId && SaleId != discountedProduct.SaleId)
             {
                 return NotFound();
             }
