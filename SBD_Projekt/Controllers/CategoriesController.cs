@@ -138,17 +138,17 @@ namespace SBD_Projekt.Controllers
                 return NotFound();
             }
 
-            if (_context.Categories.First(p => p.Id == id).Name == "Other")
-            {
-                return NotFound();
-            }
+
             var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
                 return NotFound();
             }
-
+            if (_context.Categories.First(p => p.Id == id).Name == "Other")
+            {
+                return NotFound();
+            }
             return View(category);
         }
 

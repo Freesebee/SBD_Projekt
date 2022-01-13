@@ -126,10 +126,7 @@ namespace SBD_Projekt.Controllers
                 return NotFound();
             }
 
-            if (_context.Manufacturers.First(p => p.Id == id).Name == "Other")
-            {
-                return NotFound();
-            }
+
 
             var manufacturer = await _context.Manufacturers
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -137,7 +134,10 @@ namespace SBD_Projekt.Controllers
             {
                 return NotFound();
             }
-
+            if (_context.Manufacturers.First(p => p.Id == id).Name == "Other")
+            {
+                return NotFound();
+            }
             return View(manufacturer);
         }
 
