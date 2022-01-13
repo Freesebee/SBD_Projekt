@@ -5,50 +5,71 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Product Details</h1>
-
 <div>
     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
-        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-        <a asp-controller="DiscountedProducts" asp-action="Create" asp-route-productId="@Model.Id">Add to sale</a>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit | </a> 
+        <a asp-controller="DiscountedProducts" asp-action="Create" asp-route-productId="@Model.Id">Add to sale | </a>
         <a asp-action="Index">Back to List</a>
     }
 </div>
 
-<div>
-    <link href="~/css/product.css" rel="stylesheet" />
-    <div class="home-container">
-        <img alt="image"
-             src="~/product.png"
-             class="home-image" />
-        <span class="home-text6">
-            @Html.DisplayFor(model => model.Name)
-        </span>
-        <span class="home-text2">Price:</span>
-        <span class="home-text">
-            @Html.DisplayFor(model => model.Price)
-        </span>
-        <span class="home-text1">Category:</span>
-        <span class="home-text4">
-            @Model.CategoryName
-        </span>
-        <span class="home-text5">Producer:</span>
-        <span class="home-text3">
-            @Model.ManufacturerName
-        </span>
+<dl class="row">
+    <dt class="col-sm-2 h1">
+       @Model.Name
+    </dt>
+    <dd class="col-sm-10 h3">
         <form asp-action="AddToFavourites"
               asp-route-productId="@Model.Id">
             <button type="submit"> LIKE </button>
         </form>
+    </dd>
+</dl>
 
-        <input type="button" id="addToCartBtn" value="Add to cart" />
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Price)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.Price)
+            </dd>
+            <dd class="col-sm-8">
+                <input type="button" id="addToCartBtn" value="Add to cart" />
+            </dd>
+            <dt class="col-sm-2">
+                Category
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CategoryName)
+            </dd>
+            <dt class="col-sm-2">
+                Manufacturer
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ManufacturerName)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        Comments |
         <a asp-action="Create"
            asp-controller="Opinions"
-           asp-route-productId="@Model.Id">Add opinion</a>
-        <div class="home-container1">
-            @*<div class="home-container2"></div>
-                <div class="home-container3"></div>*@
+           asp-route-productId="@Model.Id"> Add your opinion</a>
+    </div>
+    @if (Model.OpinionList == null || Model.OpinionList.Count <= 0)
+    {
+        <h4>There are no comments yet</h4>
+    }
+    else
+    {
+        <div>
             <table class="table">
                 <thead>
                     <tr>
@@ -83,12 +104,10 @@
                 </tbody>
             </table>
         </div>
-    </div>
-</div>
+    }
 
-
-@section Scripts {
-    <script type="text/javascript">
+    @section Scripts {
+        <script type="text/javascript">
         $(function () {
             $("#addToCartBtn").click(function () {
                 $.ajax({
@@ -107,5 +126,5 @@
                 });
             });
         });
-    </script>
-}
+        </script>
+    }
