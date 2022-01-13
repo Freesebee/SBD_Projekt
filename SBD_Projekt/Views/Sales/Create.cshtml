@@ -28,6 +28,14 @@
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
+            @if (ViewBag.DateUnavailable != null)
+            {
+                var conflicting = (ViewBag.DateUnavailable as IList<SBDProjekt.Models.Sale>).First();
+                <span class="text-danger">
+                    Can't create Sale in this time interval - it conflicts with: 
+                    @conflicting.Name (@conflicting.StartDate - @conflicting.EndDate)
+                </span>
+            }
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

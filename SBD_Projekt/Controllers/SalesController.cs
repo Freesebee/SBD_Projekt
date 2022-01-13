@@ -69,7 +69,13 @@ namespace SBD_Projekt.Controllers
         {
             if (ModelState.IsValid)
             {
-                //TODO: Check if date is availabe
+                var conflictingSales = IsTimeAvailable(sale.StartDate, sale.EndDate);
+
+                if (conflictingSales != null)
+                {
+                    ViewBag.DateUnavailable = conflictingSales;
+                    return View(sale);
+                }
 
                 _context.Add(sale);
                 await _context.SaveChangesAsync();
@@ -110,7 +116,13 @@ namespace SBD_Projekt.Controllers
             {
                 try
                 {
-                    //TODO: Check if date is availabe
+                    var conflictingSales = IsTimeAvailable(sale.StartDate, sale.EndDate);
+
+                    if (conflictingSales != null)
+                    {
+                        ViewBag.DateUnavailable = conflictingSales;
+                        return View(sale);
+                    }
 
                     _context.Update(sale);
                     await _context.SaveChangesAsync();
@@ -165,6 +177,21 @@ namespace SBD_Projekt.Controllers
         private bool SaleExists(int id)
         {
             return _context.Sales.Any(e => e.Id == id);
+        }
+
+        /// <summary>
+        /// Checks wheter time between dates is available in database
+        /// </summary>
+        /// <returns>Null if time between is available or Sale object which has conflicts</returns>
+        private IList<Sale> IsTimeAvailable(DateTime startDate, DateTime endDate)
+        {
+            var conflictingSales = _context.Sales
+                .Where(s => (
+                    (s.StartDate >= startDate && s.StartDate <= endDate) 
+                    || (s.EndDate >= startDate && s.EndDate <= endDate)))
+                .ToList();
+
+            return conflictingSales == null || conflictingSales.Count == 0 ? null : conflictingSales;
         }
     }
 }
