@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SBDProjekt.Infrastructure;
 using SBDProjekt.Models;
+using SBDProjekt.Models.ViewModels;
 
 namespace SBD_Projekt.Controllers
 {
@@ -35,32 +36,20 @@ namespace SBD_Projekt.Controllers
             }
 
             var sale = await _context.Sales
+                .Include(s => s.DiscountedProducts)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (sale == null)
             {
                 return NotFound();
             }
+            
+            var saleDetails = new DetailsSaleViewModel(sale);
 
-            List<DiscountedProduct> discountedProducts = await _context
-                .DiscountedProduct
-                .Where(p => p.SaleId == sale.Id)
-                .ToListAsync();
+            saleDetails.Discounts = await _context.DiscountedProduct
+                .Where(s => s.SaleId == sale.Id).ToListAsync();
 
-
-            if (discountedProducts.Count > 0)
-            {
-                var list = new List<Product>();
-                foreach (DiscountedProduct discount in discountedProducts)
-                {
-                    Product product = _context.Products.Single(p => p.Id == discount.ProductId);
-                    list.Add(product);
-                }
-
-                sale.DiscountedProducts = list;
-            }
-
-            return View(sale);
+            return View(saleDetails);
         }
 
         // GET: Sales/Create

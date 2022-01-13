@@ -1,5 +1,5 @@
-﻿@model SBDProjekt.Models.Sale
-
+﻿@model SBDProjekt.Models.ViewModels.DetailsSaleViewModel
+ 
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -43,37 +43,44 @@ else
         <table class="table">
             <thead>
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th></th>
+                    <th>@nameof(SBDProjekt.Models.Product)</th>
+                    <th>Original @Html.DisplayNameFor(model => model.DiscountedProducts.FirstOrDefault().Price)</th>
+                    <th>@Html.DisplayNameFor(model => model.Discounts.FirstOrDefault().Discount)</th>
+                    <th>Sale price</th>
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <th>Actions</th>
+                    }
                 </tr>
             </thead>
             <tbody>
-                @foreach (var product in Model.DiscountedProducts)
+                @foreach (var product in Model.Discounts)
                 {
-                    <tr>
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => product.Product.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => product.Product.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => product.Discount)</td>
+                    <td>@Math.Round(product.Product.Price * (100-product.Discount)/100,2)</td>
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
                         <td>
-                            @Html.DisplayFor(modelItem => product.Name)
-                        </td>
-                        <td>
-                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                        {
                             <a asp-controller="DiscountedProducts"
                                asp-action="Edit"
-                               asp-route-productId="@product.Id"
+                               asp-route-productId="@product.ProductId"
                                asp-route-saleId="@Model.Id">
                                 Edit |
                             </a>
                             <a asp-controller="DiscountedProducts"
-                                  asp-action = "Delete"
-                                  asp-route-id = "@product.Id"
-                                  asp-route-saleId = "@Model.Id" >
+                               asp-action="Delete"
+                               asp-route-id="@product.ProductId"
+                               asp-route-saleId="@Model.Id">
                                 Delete
                             </a>
-                        }
                         </td>
-                    </tr>
+                    }
+                </tr>
                 }
             </tbody>
         </table>

@@ -46,7 +46,7 @@ namespace SBD_Projekt.Controllers
             {
                 _context.Add(discountedProduct);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(ProductsController.Details), new { id = discountedProduct.ProductId});
+                return RedirectToAction(nameof(SalesController.Details), "Sales", new { id = discountedProduct.SaleId });
             }
             return RedirectToAction(nameof(Create), new { productId = discountedProduct.ProductId });
         }
@@ -98,7 +98,7 @@ namespace SBD_Projekt.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(SalesController.Details), "Sales", new { id = discountedProduct.SaleId });
             }
             return View(discountedProduct);
         }
@@ -120,6 +120,7 @@ namespace SBD_Projekt.Controllers
                 .Include(d => d.Product)
                 .Include(d => d.Sale)
                 .FirstOrDefaultAsync(m => m.ProductId == id && m.SaleId == saleId);
+
             if (discountedProduct == null)
             {
                 return NotFound();
@@ -136,7 +137,7 @@ namespace SBD_Projekt.Controllers
             var discountedProduct = await _context.DiscountedProduct.FindAsync(id, saleId);
             _context.DiscountedProduct.Remove(discountedProduct);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(SalesController.Details), new { id = saleId });
+            return RedirectToAction(nameof(SalesController.Details), "Sales", new { id = saleId });
         }
 
         private bool DiscountedProductExists(int id)
